@@ -19,6 +19,8 @@ platform "cli"
         Locale,
         Sqlite,
         Random,
+        Gmp,
+        Math,
     ]
     packages {}
     imports []

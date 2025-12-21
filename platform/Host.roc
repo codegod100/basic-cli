@@ -44,6 +44,30 @@ hosted [
     sqlite_prepare!,
     sqlite_reset!,
     sqlite_step!,
+    gmp_int_from_i64!,
+    gmp_int_from_str!,
+    gmp_int_to_str!,
+    gmp_int_add!,
+    gmp_int_sub!,
+    gmp_int_mul!,
+    gmp_int_div!,
+    gmp_int_mod!,
+    gmp_int_cmp!,
+    gmp_float_from_f64!,
+    gmp_float_from_str!,
+    gmp_float_to_str!,
+    gmp_float_add!,
+    gmp_float_sub!,
+    gmp_float_mul!,
+    gmp_float_div!,
+    gmp_float_cmp!,
+    gmp_float_sqrt!,
+    gmp_float_exp!,
+    gmp_float_ln!,
+    gmp_float_log10!,
+    gmp_float_sin!,
+    gmp_float_cos!,
+    gmp_float_tan!,
     stderr_line!,
     stderr_write!,
     stderr_write_bytes!,
@@ -68,6 +92,7 @@ import InternalCmd
 import InternalPath
 import InternalIOErr
 import InternalSqlite
+import InternalGmp
 # COMMAND
 command_exec_exit_code! : InternalCmd.Command => Result I32 InternalIOErr.IOErrFromHost
 command_exec_output! : InternalCmd.Command => Result InternalCmd.OutputFromHostSuccess (Result InternalCmd.OutputFromHostFailure InternalIOErr.IOErrFromHost)
@@ -130,6 +155,33 @@ sqlite_columns! : Box {} => List Str
 sqlite_column_value! : Box {}, U64 => Result InternalSqlite.SqliteValue InternalSqlite.SqliteError
 sqlite_step! : Box {} => Result InternalSqlite.SqliteState InternalSqlite.SqliteError
 sqlite_reset! : Box {} => Result {} InternalSqlite.SqliteError
+
+# GMP
+gmp_int_from_i64! : I64 => Box {}
+gmp_int_from_str! : Str => Result (Box {}) InternalGmp.GmpError
+gmp_int_to_str! : Box {} => Str
+gmp_int_add! : Box {}, Box {} => Box {}
+gmp_int_sub! : Box {}, Box {} => Box {}
+gmp_int_mul! : Box {}, Box {} => Box {}
+gmp_int_div! : Box {}, Box {} => Result (Box {}) InternalGmp.GmpError
+gmp_int_mod! : Box {}, Box {} => Result (Box {}) InternalGmp.GmpError
+gmp_int_cmp! : Box {}, Box {} => I32
+
+gmp_float_from_f64! : F64 => Box {}
+gmp_float_from_str! : Str => Result (Box {}) InternalGmp.GmpError
+gmp_float_to_str! : Box {} => Str
+gmp_float_add! : Box {}, Box {} => Box {}
+gmp_float_sub! : Box {}, Box {} => Box {}
+gmp_float_mul! : Box {}, Box {} => Box {}
+gmp_float_div! : Box {}, Box {} => Result (Box {}) InternalGmp.GmpError
+gmp_float_cmp! : Box {}, Box {} => I32
+gmp_float_sqrt! : Box {} => Box {}
+gmp_float_exp! : Box {} => Box {}
+gmp_float_ln! : Box {} => Box {}
+gmp_float_log10! : Box {} => Box {}
+gmp_float_sin! : Box {} => Box {}
+gmp_float_cos! : Box {} => Box {}
+gmp_float_tan! : Box {} => Box {}
 
 # OTHERS
 current_arch_os! : {} => { arch : Str, os : Str }

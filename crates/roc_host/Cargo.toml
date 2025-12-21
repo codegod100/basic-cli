@@ -29,6 +29,7 @@ roc_stdio.workspace = true
 roc_env.workspace = true
 roc_random.workspace = true
 roc_sqlite.workspace = true
+roc_gmp.workspace = true
 hyper.workspace = true
 hyper-rustls.workspace = true
 tokio.workspace = true

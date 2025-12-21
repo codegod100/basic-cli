@@ -64,6 +64,16 @@ pub unsafe extern "C" fn roc_dealloc(c_ptr: *mut c_void, _alignment: u32) {
         heap.dealloc(c_ptr);
         return;
     }
+    let heap = roc_gmp::int_heap();
+    if heap.in_range(c_ptr) {
+        heap.dealloc(c_ptr);
+        return;
+    }
+    let heap = roc_gmp::float_heap();
+    if heap.in_range(c_ptr) {
+        heap.dealloc(c_ptr);
+        return;
+    }
     libc::free(c_ptr)
 }
 
@@ -357,6 +367,30 @@ pub fn init() {
         roc_fx_sqlite_prepare as _,
         roc_fx_sqlite_reset as _,
         roc_fx_sqlite_step as _,
+        roc_fx_gmp_int_from_i64 as _,
+        roc_fx_gmp_int_from_str as _,
+        roc_fx_gmp_int_to_str as _,
+        roc_fx_gmp_int_add as _,
+        roc_fx_gmp_int_sub as _,
+        roc_fx_gmp_int_mul as _,
+        roc_fx_gmp_int_div as _,
+        roc_fx_gmp_int_mod as _,
+        roc_fx_gmp_int_cmp as _,
+        roc_fx_gmp_float_from_f64 as _,
+        roc_fx_gmp_float_from_str as _,
+        roc_fx_gmp_float_to_str as _,
+        roc_fx_gmp_float_add as _,
+        roc_fx_gmp_float_sub as _,
+        roc_fx_gmp_float_mul as _,
+        roc_fx_gmp_float_div as _,
+        roc_fx_gmp_float_cmp as _,
+        roc_fx_gmp_float_sqrt as _,
+        roc_fx_gmp_float_exp as _,
+        roc_fx_gmp_float_ln as _,
+        roc_fx_gmp_float_log10 as _,
+        roc_fx_gmp_float_sin as _,
+        roc_fx_gmp_float_cos as _,
+        roc_fx_gmp_float_tan as _,
     ];
     #[allow(forgetting_references)]
     std::mem::forget(std::hint::black_box(funcs));
@@ -861,4 +895,133 @@ pub extern "C" fn roc_fx_sqlite_step(
 #[no_mangle]
 pub extern "C" fn roc_fx_sqlite_reset(stmt: RocBox<()>) -> RocResult<(), roc_sqlite::SqliteError> {
     roc_sqlite::reset(stmt)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_from_i64(value: i64) -> RocBox<()> {
+    roc_gmp::int_from_i64(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_from_str(value: &RocStr) -> RocResult<RocBox<()>, RocStr> {
+    roc_gmp::int_from_str(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_to_str(value: RocBox<()>) -> RocStr {
+    roc_gmp::int_to_str(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_add(a: RocBox<()>, b: RocBox<()>) -> RocBox<()> {
+    roc_gmp::int_add(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_sub(a: RocBox<()>, b: RocBox<()>) -> RocBox<()> {
+    roc_gmp::int_sub(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_mul(a: RocBox<()>, b: RocBox<()>) -> RocBox<()> {
+    roc_gmp::int_mul(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_div(
+    a: RocBox<()>,
+    b: RocBox<()>,
+) -> RocResult<RocBox<()>, RocStr> {
+    roc_gmp::int_div(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_mod(
+    a: RocBox<()>,
+    b: RocBox<()>,
+) -> RocResult<RocBox<()>, RocStr> {
+    roc_gmp::int_mod(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_int_cmp(a: RocBox<()>, b: RocBox<()>) -> i32 {
+    roc_gmp::int_cmp(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_from_f64(value: f64) -> RocBox<()> {
+    roc_gmp::float_from_f64(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_from_str(value: &RocStr) -> RocResult<RocBox<()>, RocStr> {
+    roc_gmp::float_from_str(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_to_str(value: RocBox<()>) -> RocStr {
+    roc_gmp::float_to_str(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_add(a: RocBox<()>, b: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_add(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_sub(a: RocBox<()>, b: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_sub(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_mul(a: RocBox<()>, b: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_mul(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_div(
+    a: RocBox<()>,
+    b: RocBox<()>,
+) -> RocResult<RocBox<()>, RocStr> {
+    roc_gmp::float_div(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_cmp(a: RocBox<()>, b: RocBox<()>) -> i32 {
+    roc_gmp::float_cmp(a, b)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_sqrt(value: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_sqrt(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_exp(value: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_exp(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_ln(value: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_ln(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_log10(value: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_log10(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_sin(value: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_sin(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_cos(value: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_cos(value)
+}
+
+#[no_mangle]
+pub extern "C" fn roc_fx_gmp_float_tan(value: RocBox<()>) -> RocBox<()> {
+    roc_gmp::float_tan(value)
 }

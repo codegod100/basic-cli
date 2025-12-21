@@ -12,6 +12,7 @@ members = [
     "crates/roc_env",
     "crates/roc_sqlite",
     "crates/roc_random",
+    "crates/roc_gmp",
 ]
 
 [workspace.package]
@@ -40,6 +41,8 @@ roc_stdio = { path = "crates/roc_stdio" }
 roc_env = { path = "crates/roc_env" }
 roc_random = { path = "crates/roc_random" }
 roc_sqlite = { path = "crates/roc_sqlite" }
+roc_gmp = { path = "crates/roc_gmp" }
+rug = "=1.26.0"
 memchr = "=2.7.4"
 hyper = { version = "=1.6.0", default-features = false, features = [
     "http1",

@@ -1,0 +1,13 @@
+[package]
+name = "roc_gmp"
+description = "Common functionality for Roc to interface with GMP via rug"
+
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+
+[dependencies]
+roc_std.workspace = true
+roc_std_heap.workspace = true
+rug.workspace = true

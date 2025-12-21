@@ -1,0 +1,5 @@
+module [
+    GmpError,
+]
+
+GmpError : Str
