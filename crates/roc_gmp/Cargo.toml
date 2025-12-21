@@ -11,3 +11,4 @@ version.workspace = true
 roc_std.workspace = true
 roc_std_heap.workspace = true
 rug.workspace = true
+gmp-mpfr-sys.workspace = true

@@ -1,0 +1,42 @@
+name: Publish dev platform
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-dev:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: roc-lang/setup-roc@39c354a6a838a0089eea9068a0414f49b62c5c08
+        with:
+          version: nightly
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y m4 brotli
+
+      - name: Build platform
+        run: ROC=roc roc build.roc
+
+      - name: Package platform
+        run: |
+          tar -C platform -cvf basic-cli-dev.tar .
+          brotli -f basic-cli-dev.tar
+
+      - name: Publish dev release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: dev
+          name: dev
+          prerelease: true
+          allowUpdates: true
+          replacesArtifacts: true
+          artifacts: basic-cli-dev.tar.br

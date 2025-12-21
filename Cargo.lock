@@ -585,6 +585,7 @@ dependencies = [
 name = "roc_gmp"
 version = "0.0.1"
 dependencies = [
+ "gmp-mpfr-sys",
  "roc_std",
  "roc_std_heap",
  "rug",

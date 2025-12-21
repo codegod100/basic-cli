@@ -43,6 +43,7 @@ roc_random = { path = "crates/roc_random" }
 roc_sqlite = { path = "crates/roc_sqlite" }
 roc_gmp = { path = "crates/roc_gmp" }
 rug = "=1.26.0"
+gmp-mpfr-sys = { version = "=1.6.8", features = ["force-cross"] }
 memchr = "=2.7.4"
 hyper = { version = "=1.6.0", default-features = false, features = [
     "http1",
