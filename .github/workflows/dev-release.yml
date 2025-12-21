@@ -24,7 +24,7 @@ jobs:
           sudo apt-get install -y m4 brotli
 
       - name: Build platform
-        run: ROC=roc roc build.roc
+        run: ./jump-start.sh
 
       - name: Package platform
         run: |
