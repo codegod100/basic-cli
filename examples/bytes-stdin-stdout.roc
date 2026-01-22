@@ -8,8 +8,8 @@ import pf.Stderr
 
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
-    data = Stdin.bytes!({})?
-    Stderr.write_bytes!(data)?
-    Stdout.write_bytes!(data)?
+    data = Stdin.bytes!({})
+    Stderr.write_bytes!(data)
+    Stdout.write_bytes!(data)
     Ok({})
 }

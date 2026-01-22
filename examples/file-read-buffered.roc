@@ -20,9 +20,9 @@ import pf.File
 
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
-    reader = File.open_reader!("LICENSE")?
+    reader = File.open_reader!("LICENSE")
 
-    read_summary = process_line!(reader, { lines_read: 0, bytes_read: 0 })?
+    read_summary = process_line!(reader, { lines_read: 0, bytes_read: 0 })
 
     Stdout.line!("Done reading file: ${Inspect.to_str(read_summary)}")
     Ok({})
@@ -45,7 +45,7 @@ process_line! = |reader, { lines_read, bytes_read }|
                 reader,
                 {
                     lines_read: lines_read + 1,
-                    bytes_read: bytes_read + (List.len(bytes) |> Num.int_cast),
+                    bytes_read: bytes_read + (List.len(bytes)  Num.int_cast),
                 },
             )
 

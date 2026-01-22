@@ -38,7 +38,7 @@ main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
     Tty.enable_raw_mode!({})
 
-    game_loop!(initial_state)?
+    game_loop!(initial_state)
 
     Tty.disable_raw_mode!({})
     Stdout.line!("\n--- Game Over ---")
@@ -50,10 +50,10 @@ game_loop! = |state|
     if state.game_over then
         Ok({})
     else
-        draw_game!(state)?
+        draw_game!(state)
 
         # Check keyboard input
-        input_bytes = Stdin.bytes!({})?
+        input_bytes = Stdin.bytes!({})
 
         partial_new_state =
             when input_bytes is
@@ -96,7 +96,7 @@ update_game = |state|
             else
                 new_snake_lst =
                     prepend(state.snake_lst, new_head_pos)
-                    |> |snake_lst| { first: snake_lst.first, rest: List.drop_last(snake_lst.rest, 1) }
+                     |snake_lst| { first: snake_lst.first, rest: List.drop_last(snake_lst.rest, 1) }
 
                 { state & snake_lst: new_snake_lst }
 
@@ -112,12 +112,12 @@ move_head = |head, direction|
 
 draw_game! : GameState => Result {} _
 draw_game! = |state|
-    clear_screen!({})?
+    clear_screen!({})
 
-    Stdout.line!("\nControls: W A S D to move, Q to quit\n\r")?
+    Stdout.line!("\nControls: W A S D to move, Q to quit\n\r")
 
     # \r to fix indentation because we're in raw mode
-    Stdout.line!("Score: ${Num.to_str(len(state.snake_lst) - init_snake_len)}\r")?
+    Stdout.line!("Score: ${Num.to_str(len(state.snake_lst) - init_snake_len)}\r")
 
     rendered_game_str = draw_game_pure(state)
 
@@ -126,11 +126,11 @@ draw_game! = |state|
 draw_game_pure : GameState -> Str
 draw_game_pure = |state|
     List.range({ start: At 0, end: Before grid_size })
-    |> List.map(
+     List.map(
         |yy|
             line =
                 List.range({ start: At 0, end: Before grid_size })
-                |> List.map(
+                 List.map(
                     |xx|
                         pos = { x: xx, y: yy }
                         if contains(state.snake_lst, pos) then
@@ -143,11 +143,11 @@ draw_game_pure = |state|
                         else
                             ".", # Empty space
                 )
-                |> Str.join_with("")
+                 Str.join_with("")
 
             line,
     )
-    |> Str.join_with("\r\n")
+     Str.join_with("\r\n")
 
 clear_screen! = |{}|
     Stdout.write!("\u(001b)[2J\u(001b)[H") # ANSI escape codes to clear screen

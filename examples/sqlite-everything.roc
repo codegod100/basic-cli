@@ -21,7 +21,7 @@ import pf.Sqlite
 
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
-    db_path = Env.var!("DB_PATH")?
+    db_path = Env.var!("DB_PATH")
 
     # Example: print all rows
 
@@ -33,19 +33,19 @@ main! = |_args| {
         rows: { Sqlite.decode_record <-
             id: Sqlite.i64("id"),
             task: Sqlite.str("task"),
-            status: Sqlite.str("status") |> Sqlite.map_value_result(decode_status),
+            status: Sqlite.str("status")  Sqlite.map_value_result(decode_status),
             # bools in sqlite are actually integers
-            edited: Sqlite.nullable_i64("edited") |> Sqlite.map_value(decode_edited),
+            edited: Sqlite.nullable_i64("edited")  Sqlite.map_value(decode_edited),
         },
-    })?
+    })
 
-    Stdout.line!("All Todos:")?
+    Stdout.line!("All Todos:")
 
     List.for_each_try!(
         all_todos,
         |{ id, task, status, edited }|
             Stdout.line!("\tid: ${Num.to_str(id)}, task: ${task}, status: ${Inspect.to_str(status)}, edited: ${Inspect.to_str(edited)}"),
-    )?
+    )
 
     Ok({})
 }
@@ -59,15 +59,15 @@ main! = |_args| {
             bindings: [{ name: ":status", value: encode_status(InProgress) }],
             rows: Sqlite.str("task")
         },
-    )?
+    )
 
-    Stdout.line!("\nIn-progress Todos:")?
+    Stdout.line!("\nIn-progress Todos:")
 
     List.for_each_try!(
         tasks_in_progress,
         |task_description|
             Stdout.line!("\tIn-progress tasks: ${task_description}"),
-    )?
+    )
 
     # Example: insert a row
 
@@ -79,7 +79,7 @@ main! = |_args| {
             { name: ":status", value: encode_status(InProgress) },
             { name: ":edited", value: encode_edited(NotEdited) },
         ],
-    })?
+    })
 
     # Example: insert multiple rows from a Roc list
 
@@ -92,16 +92,16 @@ main! = |_args| {
 
     values_str =
         todos_list
-        |> List.map_with_index(
+         List.map_with_index(
             |_, indx|
                 indx_str = Num.to_str(indx)
                 "(:task${indx_str}, :status${indx_str}, :edited${indx_str})",
         )
-        |> Str.join_with(", ")
+         Str.join_with(", ")
 
     all_bindings =
         todos_list
-        |> List.map_with_index(
+         List.map_with_index(
             |{ task, status, edited }, indx|
                 indx_str = Num.to_str(indx)
                 [
@@ -110,13 +110,13 @@ main! = |_args| {
                     { name: ":edited${indx_str}", value: encode_edited(edited) },
                 ],
         )
-        |> List.join
+         List.join
 
     Sqlite.execute!({
         path: db_path,
         query: "INSERT INTO todos (task, status, edited) VALUES ${values_str};",
         bindings: all_bindings,
-    })?
+    })
 
     # Example: update a row
 
@@ -127,7 +127,7 @@ main! = |_args| {
             { name: ":task", value: String("Make sql example.") },
             { name: ":status", value: encode_status(Completed) },
         ],
-    })?
+    })
 
     # Example: delete a row
 
@@ -137,7 +137,7 @@ main! = |_args| {
         bindings: [
             { name: ":task", value: String("Make sql example.") },
         ],
-    })?
+    })
 
     # Example: delete all rows where ID is greater than 3
 
@@ -147,7 +147,7 @@ main! = |_args| {
         bindings: [
             { name: ":id", value: Integer(3) },
         ],
-    })?
+    })
 
     # Example: count the number of rows
 
@@ -156,7 +156,7 @@ main! = |_args| {
         query: "SELECT COUNT(*) as \"count\" FROM todos;",
         bindings: [],
         row: Sqlite.u64("count"),
-    })?
+    })
 
     expect count == 3
 
@@ -166,24 +166,24 @@ main! = |_args| {
     prepared_query = Sqlite.prepare!({
         path : db_path,
         query : "SELECT * FROM todos ORDER BY LENGTH(task);", # sort by the length of the task description
-    })?
+    })
     
     todos_sorted = Sqlite.query_many_prepared!({
         stmt: prepared_query,
         bindings: [],
         rows: { Sqlite.decode_record <-
             task: Sqlite.str("task"),
-            status: Sqlite.str("status") |> Sqlite.map_value_result(decode_status),
+            status: Sqlite.str("status")  Sqlite.map_value_result(decode_status),
         },
-    })?
+    })
 
-    Stdout.line!("\nTodos sorted by length of task description:")?
+    Stdout.line!("\nTodos sorted by length of task description:")
 
     List.for_each_try!(
         todos_sorted,
         |{ task, status }|
             Stdout.line!("\t task: ${task}, status: ${Inspect.to_str(status)}"),
-    )?
+    )
 
     Ok({})
 

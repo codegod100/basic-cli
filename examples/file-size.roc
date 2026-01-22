@@ -7,7 +7,7 @@ import pf.File
 
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
-    file_size = File.size_in_bytes!("LICENSE")?
+    file_size = File.size_in_bytes!("LICENSE")
 
     Stdout.line!("The size of the LICENSE file is: ${Num.to_str(file_size)} bytes")
     Ok({})

@@ -11,13 +11,13 @@ main! = |_args| {
     file = "LICENSE"
 
     # NOTE: these functions will not work if basic-cli was built with musl, which is the case for the normal tar.br URL release.
-    # See https://github.com/roc-lang/basic-cli?tab=readme-ov-file#running-locally to build basic-cli without musl.
+    # See https://github.com/roc-lang/basic-cli
 
-    time_modified = Utc.to_iso_8601(File.time_modified!(file)?)
+    time_modified = Utc.to_iso_8601(File.time_modified!(file)
 
-    time_accessed = Utc.to_iso_8601(File.time_accessed!(file)?)
+    time_accessed = Utc.to_iso_8601(File.time_accessed!(file)
 
-    time_created = Utc.to_iso_8601(File.time_created!(file)?)
+    time_created = Utc.to_iso_8601(File.time_created!(file)
 
 
     Stdout.line!(

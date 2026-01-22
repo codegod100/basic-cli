@@ -13,15 +13,15 @@ import pf.Stderr
 
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
-    tcp_stream = Tcp.connect!("127.0.0.1", 8085)?
+    tcp_stream = Tcp.connect!("127.0.0.1", 8085)
 
-    Stdout.line!("Connected!")?
+    Stdout.line!("Connected!")
 
     loop!(
         {},
         |_| Result.map_ok(tick!(tcp_stream), Step),
     )
-    |> Result.on_err!(handle_err!)
+     Result.on_err!(handle_err!)
 
     Ok({})
 }
@@ -29,13 +29,13 @@ main! = |_args| {
 ## Read from stdin, send to the server, and print the response.
 tick! : Tcp.Stream => Result {} _
 tick! = |tcp_stream|
-    Stdout.write!("> ")?
+    Stdout.write!("> ")
 
-    out_msg = Stdin.line!({})?
+    out_msg = Stdin.line!({})
 
-    Tcp.write_utf8!(tcp_stream, "${out_msg}\n")?
+    Tcp.write_utf8!(tcp_stream, "${out_msg}\n")
 
-    in_msg = Tcp.read_line!(tcp_stream)?
+    in_msg = Tcp.read_line!(tcp_stream)
 
     Stdout.line!("< ${in_msg}")
 

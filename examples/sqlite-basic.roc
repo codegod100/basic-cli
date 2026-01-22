@@ -17,22 +17,22 @@ import pf.Sqlite
 
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
-    db_path = Env.var!("DB_PATH")?
+    db_path = Env.var!("DB_PATH")
 
-    todos = query_todos_by_status!(db_path, "todo")?
+    todos = query_todos_by_status!(db_path, "todo")
 
-    Stdout.line!("All Todos:")?
+    Stdout.line!("All Todos:")
 
     # print todos
     List.for_each_try!(
         todos,
         |{ id, task, status }|
             Stdout.line!("\tid: ${id}, task: ${task}, status: ${Inspect.to_str(status)}"),
-    )?
+    )
 
-    completed_todos = query_todos_by_status!(db_path, "completed")?
+    completed_todos = query_todos_by_status!(db_path, "completed")
 
-    Stdout.line!("\nCompleted Todos:")?
+    Stdout.line!("\nCompleted Todos:")
     List.for_each_try!(
         completed_todos,
         |{ id, task, status }|
@@ -53,9 +53,9 @@ query_todos_by_status! = |db_path, status|
             bindings: [{ name: ":status", value: String(status) }],
             # This uses the record builder syntax: https://www.roc-lang.org/examples/RecordBuilder/README.html
             rows: { Sqlite.decode_record <-
-                id: Sqlite.i64("id") |> Sqlite.map_value(Num.to_str),
+                id: Sqlite.i64("id")  Sqlite.map_value(Num.to_str),
                 task: Sqlite.str("task"),
-                status: Sqlite.str("status") |> Sqlite.map_value_result(decode_todo_status),
+                status: Sqlite.str("status")  Sqlite.map_value_result(decode_todo_status),
             },
         },
     )

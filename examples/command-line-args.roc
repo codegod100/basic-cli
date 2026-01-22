@@ -11,9 +11,9 @@ import pf.Stdout
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |args| {
     # Print all arguments
-    Stdout.line!("Received ${Num.to_str(List.len(args))} arguments:")?
+    Stdout.line!("Received ${Num.to_str(List.len(args))} arguments:")
 
-    List.for_each(args, |arg| Stdout.line!("  ${arg}")?)
+    List.for_each(args, |arg| Stdout.line!("  ${arg}")
 
     Ok({})
 }

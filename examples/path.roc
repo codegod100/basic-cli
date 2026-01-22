@@ -11,10 +11,10 @@ main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
     path = Path.from_str("path.roc")
 
-    a = Path.is_file!(path)?
-    b = Path.is_dir!(path)?
-    c = Path.is_sym_link!(path)?
-    d = Path.type!(path)?
+    a = Path.is_file!(path)
+    b = Path.is_dir!(path)
+    c = Path.is_sym_link!(path)
+    d = Path.type!(path)
 
     Stdout.line!(
         """

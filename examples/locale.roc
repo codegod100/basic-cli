@@ -9,8 +9,8 @@ import pf.Locale
 
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
-    locale_str = Locale.get!({})?
-    Stdout.line!("The most preferred locale for this system or application: ${locale_str}")?
+    locale_str = Locale.get!({})
+    Stdout.line!("The most preferred locale for this system or application: ${locale_str}")
 
     all_locales = Locale.all!({})
     Stdout.line!("All available locales for this system or application: ${Inspect.to_str(all_locales)}")

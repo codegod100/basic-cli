@@ -10,13 +10,13 @@ import pf.Stdout
 
 main! : List(Str) => Try({}, [Exit(I32)])
 main! = |_args| {
-    Stdout.line!("What's your first name?")?
+    Stdout.line!("What's your first name
 
-    first = Stdin.line!({})?
+    first = Stdin.line!({})
 
-    Stdout.line!("What's your last name?")?
+    Stdout.line!("What's your last name
 
-    last = Stdin.line!({})?
+    last = Stdin.line!({})
 
     Stdout.line!("Hi, ${first} ${last}!")
     Ok({})
