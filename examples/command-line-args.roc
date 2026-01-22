@@ -1,6 +1,4 @@
-app [main!] {
-    pf: platform "../platform/main.roc",
-}
+app [main!] { pf: platform "../platform/main.roc" }
 
 import pf.Stdout
 
@@ -13,7 +11,6 @@ main! = |args| {
     # Print all arguments
     Stdout.line!("Received ${Num.to_str(List.len(args))} arguments:")
 
-    List.for_each(args, |arg| Stdout.line!("  ${arg}")
-
+    List.for_each(args, |arg| Stdout.line!("  ${arg}"))
     Ok({})
 }
