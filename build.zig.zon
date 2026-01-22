@@ -1,0 +1,16 @@
+.{
+    .name = .basic_cli,
+    .version = "0.0.1",
+    .minimum_zig_version = "0.15.2",
+    .dependencies = .{
+        .roc = .{
+            .path = "../roc",
+        },
+    },
+    .fingerprint = 0x80ed13ca3c3922c2,
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "platform",
+    },
+}

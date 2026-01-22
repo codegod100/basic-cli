@@ -1,11 +1,7 @@
-app [main!] { pf: platform "../platform/main.roc" }
+app [main] { pf: platform "../platform/main.roc" }
 
-import pf.Stdout
-
-# To run this example: check the README.md in this folder
-
-main! : List(Str) => Try({}, [Exit(I32)])
-main! = |_args| {
-    Stdout.line!("Hello, World!")
-    Ok({})
+# Minimal pure hello world - just returns a number
+main : {} -> I32
+main = |{}| {
+    42
 }
