@@ -23,7 +23,7 @@ import Host
 ## # Call echo to print "hello world"
 ## Cmd.exec!("echo", ["hello world"])?
 ## ```
-exec! : Str, List Str => Result {} [ExecFailed { command : Str, exit_code : I32 }, FailedToGetExitCode { command : Str, err : IOErr }]
+exec! : Str, List(Str) => {}
 exec! = |cmd_name, arguments|
     exit_code =
         new(cmd_name)
@@ -46,7 +46,7 @@ exec! = |cmd_name, arguments|
 ## |> Cmd.env("RUST_BACKTRACE", "1")
 ## |> Cmd.exec_cmd!()?
 ## ```
-exec_cmd! : Cmd => Result {} [ExecCmdFailed { command : Str, exit_code : I32 }, FailedToGetExitCode { command : Str, err : IOErr }]
+exec_cmd! : Cmd => {}
 exec_cmd! = |@Cmd(cmd)|
     exit_code =
         exec_exit_code!(@Cmd(cmd))?
@@ -120,7 +120,7 @@ exec_output! = |@Cmd(cmd)|
 ## Stdout.line!("${Inspect.to_str(cmd_output_bytes)}")? # {stderr_bytes: [], stdout_bytes: [72, 105, 10]}
 ## ```
 ##
-exec_output_bytes! : Cmd => Result { stderr_bytes : List U8, stdout_bytes : List U8 } [FailedToGetExitCodeB InternalIOErr.IOErr, NonZeroExitCodeB { exit_code : I32, stderr_bytes : List U8, stdout_bytes : List U8 }]
+exec_output_bytes! : Cmd => Result { stderr_bytes : List(U8), stdout_bytes : List(U8) } [FailedToGetExitCodeB InternalIOErr.IOErr, NonZeroExitCodeB { exit_code : I32, stderr_bytes : List(U8), stdout_bytes : List(U8) }]
 exec_output_bytes! = |@Cmd(cmd)|
     exec_res = Host.command_exec_output!(cmd)
 
@@ -233,6 +233,6 @@ arg = |@Cmd(cmd), value|
 ## |> Cmd.args(["-l", "-a"])
 ## ```
 ##
-args : Cmd, List Str -> Cmd
+args : Cmd, List(Str) -> Cmd
 args = |@Cmd(cmd), values|
     @Cmd({ cmd & args: List.concat(cmd.args, values) })

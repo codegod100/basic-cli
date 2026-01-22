@@ -25,9 +25,9 @@ Header : InternalHttp.Header
 ## ```
 ## {
 ##    method : Method,
-##    headers : List Header,
+##    headers : List(Header),
 ##    uri : Str,
-##    body : List U8,
+##    body : List(U8),
 ##    timeout_ms : [TimeoutMilliseconds U64, NoTimeout],
 ## }
 ## ```
@@ -39,8 +39,8 @@ Request : InternalHttp.Request
 ## ```
 ## {
 ##     status : U16,
-##     headers : List Header,
-##     body : List U8
+##     headers : List(Header),
+##     body : List(U8)
 ## }
 ## ```
 Response : InternalHttp.Response
@@ -92,7 +92,7 @@ header = |(name, value)| { name, value }
 ##
 ## Stdout.line!(Str.from_utf8(response.body)?)?
 ## ```
-send! : Request => Result Response [HttpErr [Timeout, NetworkError, BadBody, Other (List U8)]]
+send! : Request => Result Response [HttpErr [Timeout, NetworkError, BadBody, Other (List(U8))]]
 send! = |request|
 
     host_request = InternalHttp.to_host_request(request)
@@ -121,7 +121,7 @@ send! = |request|
 ## # On the server side we send `Encode.to_bytes({foo: "Hello Json!"}, Json.utf8)`
 ## { foo } = Http.get!("http://localhost:8000", Json.utf8)?
 ## ```
-get! : Str, fmt => Result body [HttpDecodingFailed, HttpErr _] where body implements Decoding, fmt implements DecoderFormatting
+get! : Str, fmt => Result body [HttpDecodingFailed, HttpErr _]
 get! = |uri, fmt|
     response = send!({ default_request & uri })?
 

@@ -14,10 +14,10 @@ module [
 ## Most of the time, you will pass these to packages and they will handle the
 ## encoding for you, but for quick-and-dirty code you can use [display] to
 ## convert these to [Str] in a lossy way.
-Arg := [Unix (List U8), Windows (List U16)]
-    implements [Eq, Inspect { to_inspector: arg_inspector }]
+Arg := [Unix(ListU8), Windows(ListU16)]
 
-arg_inspector : Arg -> Inspector f where f implements InspectFormatter
+
+arg_inspector : Arg -> Inspector f
 arg_inspector = |arg| Inspect.str(display(arg))
 
 test_hello : Arg
@@ -29,11 +29,11 @@ expect Inspect.to_str(test_hello) == "\"Hello\""
 ## Unwrap an [Arg] into a raw, OS-aware numeric list.
 ##
 ## This is a good way to pass [Arg]s to Roc packages.
-to_os_raw : Arg -> [Unix (List U8), Windows (List U16)]
+to_os_raw : Arg -> [Unix ListU8, Windows ListU16]
 to_os_raw = |@Arg(inner)| inner
 
 ## Wrap a raw, OS-aware numeric list into an [Arg].
-from_os_raw : [Unix (List U8), Windows (List U16)] -> Arg
+from_os_raw : [Unix (List(U8)), Windows (List(U16))] -> Arg
 from_os_raw = @Arg
 
 ## Convert an Arg to a `Str` for display purposes.
@@ -43,13 +43,13 @@ display : Arg -> Str
 display = |@Arg(inner)|
     when inner is
         Unix(bytes) ->
-            # TODO replace with Str.from_utf8_lossy : List U8 -> Str
+            # TODO replace with Str.from_utf8_lossy : List(U8) -> Str
             # see https://github.com/roc-lang/roc/issues/7390
             when Str.from_utf8(bytes) is
                 Ok(str) -> str
                 Err(_) -> crash("tried to display Arg containing invalid utf-8")
 
         Windows(_) ->
-            # TODO replace with Str.from_utf16_lossy : List U16 -> Str
+            # TODO replace with Str.from_utf16_lossy : List(U16) -> Str
             # see https://github.com/roc-lang/roc/issues/7390
             crash("display for utf-16 Arg not yet supported")

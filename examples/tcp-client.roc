@@ -4,7 +4,6 @@ import pf.Tcp
 import pf.Stdout
 import pf.Stdin
 import pf.Stderr
-import pf.Arg exposing [Arg]
 
 # To run this example: check the README.md in this folder
 
@@ -12,9 +11,8 @@ import pf.Arg exposing [Arg]
 # Connects to a server on localhost:8085, reads user input from stdin,
 # sends it to the server, and prints the server's response.
 
-main! : List Arg => Result {} _
-main! = |_args|
-
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     tcp_stream = Tcp.connect!("127.0.0.1", 8085)?
 
     Stdout.line!("Connected!")?
@@ -24,6 +22,9 @@ main! = |_args|
         |_| Result.map_ok(tick!(tcp_stream), Step),
     )
     |> Result.on_err!(handle_err!)
+
+    Ok({})
+}
 
 ## Read from stdin, send to the server, and print the response.
 tick! : Tcp.Stream => Result {} _

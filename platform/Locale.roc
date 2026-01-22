@@ -16,5 +16,5 @@ get! = |{}|
 ## Returns the preferred locales for the system or application.
 ##
 ## The returned [Str] are BCP 47 language tags, like `en-US` or `fr-CA`.
-all! : {} => List Str
+all! : {} => List(Str)
 all! = Host.get_locales!

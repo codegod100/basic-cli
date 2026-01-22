@@ -26,16 +26,16 @@ Header : { name : Str, value : Str }
 
 Request : {
     method : Method,
-    headers : List Header,
+    headers : List(Header),
     uri : Str,
-    body : List U8,
+    body : List(U8),
     timeout_ms : [TimeoutMilliseconds U64, NoTimeout],
 }
 
 Response : {
     status : U16,
-    headers : List Header,
-    body : List U8,
+    headers : List(Header),
+    body : List(U8),
 }
 
 # FOR HOST
@@ -43,16 +43,16 @@ Response : {
 RequestToAndFromHost : {
     method : U64,
     method_ext : Str,
-    headers : List Header,
+    headers : List(Header),
     uri : Str,
-    body : List U8,
+    body : List(U8),
     timeout_ms : U64,
 }
 
 ResponseToAndFromHost : {
     status : U16,
-    headers : List Header,
-    body : List U8,
+    headers : List(Header),
+    body : List(U8),
 }
 
 to_host_response : Response -> ResponseToAndFromHost

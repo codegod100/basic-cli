@@ -6,11 +6,10 @@ app [main!] {
 import pf.Http
 import pf.Stdout
 import json.Json
-import pf.Arg exposing [Arg]
 
 # Demo of all basic-cli Http functions
 
-# To run this example: 
+# To run this example:
 # ```
 # nix develop
 # cd basic-cli/ci/rust_http_server
@@ -18,9 +17,8 @@ import pf.Arg exposing [Arg]
 # ```
 # Then in another terminal: follow the steps in the README.md file of this folder.
 
-main! : List Arg => Result {} _
-main! = |_args|
-
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     # # HTTP GET a String
     #   ----------------
 
@@ -60,7 +58,7 @@ main! = |_args|
 
     # # Using default_request and providing a header
     #   --------------------------------------------
-    
+
     response_2 =
         Http.default_request
         |> &uri "https://www.example.com"
@@ -71,3 +69,5 @@ main! = |_args|
 
     # Same as above
     Stdout.line!("Response body 2:\n\t${body_str_2}.\n")
+    Ok({})
+}

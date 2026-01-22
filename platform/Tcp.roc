@@ -97,7 +97,7 @@ connect! = |host, port|
 ## ```
 ##
 ## > To read an exact number of bytes or fail, you can use [Tcp.read_exactly!] instead.
-read_up_to! : Stream, U64 => Result (List U8) [TcpReadErr StreamErr]
+read_up_to! : Stream, U64 => Result (List(U8)) [TcpReadErr StreamErr]
 read_up_to! = |@Stream(stream), bytes_to_read|
     Host.tcp_read_up_to!(stream, bytes_to_read)
     |> Result.map_err(|err| TcpReadErr(parse_stream_err(err)))
@@ -110,7 +110,7 @@ read_up_to! = |@Stream(stream), bytes_to_read|
 ##
 ## `TcpUnexpectedEOF` is returned if the stream ends before the specfied number of bytes is reached.
 ##
-read_exactly! : Stream, U64 => Result (List U8) [TcpReadErr StreamErr, TcpUnexpectedEOF]
+read_exactly! : Stream, U64 => Result (List(U8)) [TcpReadErr StreamErr, TcpUnexpectedEOF]
 read_exactly! = |@Stream(stream), bytes_to_read|
     Host.tcp_read_exactly!(stream, bytes_to_read)
     |> Result.map_err(
@@ -132,7 +132,7 @@ read_exactly! = |@Stream(stream), bytes_to_read|
 ##
 ## > To read until a newline is found, you can use [Tcp.read_line!] which
 ## conveniently decodes to a [Str].
-read_until! : Stream, U8 => Result (List U8) [TcpReadErr StreamErr]
+read_until! : Stream, U8 => Result (List(U8)) [TcpReadErr StreamErr]
 read_until! = |@Stream(stream), byte|
     Host.tcp_read_until!(stream, byte)
     |> Result.map_err(|err| TcpReadErr(parse_stream_err(err)))
@@ -162,7 +162,7 @@ read_line! = |stream|
 ## ```
 ##
 ## > To write a [Str], you can use [Tcp.write_utf8!] instead.
-write! : Stream, List U8 => Result {} [TcpWriteErr StreamErr]
+write! : Stream, List(U8) => {}
 write! = |@Stream(stream), bytes|
     Host.tcp_write!(stream, bytes)
     |> Result.map_err(|err| TcpWriteErr(parse_stream_err(err)))
@@ -175,7 +175,7 @@ write! = |@Stream(stream), bytes|
 ## ```
 ##
 ## > To write unformatted bytes, you can use [Tcp.write!] instead.
-write_utf8! : Stream, Str => Result {} [TcpWriteErr StreamErr]
+write_utf8! : Stream, Str => {}
 write_utf8! = |stream, str|
     write!(stream, Str.to_utf8(str))
 

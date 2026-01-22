@@ -2,7 +2,6 @@ app [main!] { pf: platform "../platform/main.roc" }
 
 import pf.Stdout
 import pf.File
-import pf.Arg exposing [Arg]
 
 # To run this example: check the README.md in this folder
 
@@ -19,13 +18,15 @@ import pf.Arg exposing [Arg]
 #
 # See examples/file-read-write.roc if you want to read the full contents at once.
 
-main! : List Arg => Result {} _
-main! = |_args|
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     reader = File.open_reader!("LICENSE")?
 
     read_summary = process_line!(reader, { lines_read: 0, bytes_read: 0 })?
 
     Stdout.line!("Done reading file: ${Inspect.to_str(read_summary)}")
+    Ok({})
+}
 
 ReadSummary : {
     lines_read : U64,
@@ -33,7 +34,7 @@ ReadSummary : {
 }
 
 ## Count the number of lines and the number of bytes read.
-process_line! : File.Reader, ReadSummary => Result ReadSummary _
+process_line! : File.Reader, ReadSummary => Try(ReadSummary, [Exit(I32)])
 process_line! = |reader, { lines_read, bytes_read }|
     when File.read_line!(reader) is
         Ok(bytes) if List.len(bytes) == 0 ->
@@ -49,4 +50,4 @@ process_line! = |reader, { lines_read, bytes_read }|
             )
 
         Err(err) ->
-            Err(ErrorReadingLine(Inspect.to_str(err)))
+            Err(Exit(1))

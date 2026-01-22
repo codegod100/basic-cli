@@ -3,7 +3,6 @@ app [main!] { pf: platform "../platform/main.roc" }
 import pf.Env
 import pf.Stdout
 import pf.Sqlite
-import pf.Arg exposing [Arg]
 
 # To run this example: check the README.md in this folder and set `export DB_PATH=./examples/todos2.db`
 
@@ -20,8 +19,8 @@ import pf.Arg exposing [Arg]
 # We recommend using `NOT NULL` when possible.
 # Note 2: boolean is "fake" in sqlite https://www.sqlite.org/datatype3.html
 
-main! : List Arg => Result {} _
-main! = |_args|
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     db_path = Env.var!("DB_PATH")?
 
     # Example: print all rows
@@ -47,6 +46,9 @@ main! = |_args|
         |{ id, task, status, edited }|
             Stdout.line!("\tid: ${Num.to_str(id)}, task: ${task}, status: ${Inspect.to_str(status)}, edited: ${Inspect.to_str(edited)}"),
     )?
+
+    Ok({})
+}
 
     # Example: filter rows by status
 

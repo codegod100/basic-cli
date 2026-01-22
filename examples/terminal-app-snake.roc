@@ -3,7 +3,6 @@ app [main!] { pf: platform "../platform/main.roc" }
 import pf.Stdin
 import pf.Stdout
 import pf.Tty
-import pf.Arg exposing [Arg]
 
 # To run this example: check the README.md in this folder
 
@@ -35,14 +34,16 @@ grid_size = 20
 
 init_snake_len = len(initial_state.snake_lst)
 
-main! : List Arg => Result {} _
-main! = |_args|
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     Tty.enable_raw_mode!({})
 
     game_loop!(initial_state)?
 
     Tty.disable_raw_mode!({})
     Stdout.line!("\n--- Game Over ---")
+    Ok({})
+}
 
 game_loop! : GameState => Result {} _
 game_loop! = |state|

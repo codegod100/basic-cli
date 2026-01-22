@@ -15,7 +15,7 @@ SqliteValue : [
     Real F64,
     Integer I64,
     String Str,
-    Bytes (List U8),
+    Bytes (List(U8)),
 ]
 
 SqliteState : [

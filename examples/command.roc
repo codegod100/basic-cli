@@ -2,15 +2,13 @@ app [main!] { pf: platform "../platform/main.roc" }
 
 import pf.Stdout
 import pf.Cmd
-import pf.Arg exposing [Arg]
 
-# Different ways to run commands like you do in a terminal. 
+# Different ways to run commands like you do in a terminal.
 
 # To run this example: check the README.md in this folder
 
-main! : List Arg => Result {} _
-main! = |_args|
-
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     # Simplest way to execute a command (prints to your terminal).
     Cmd.exec!("echo", ["Hello"])?
 
@@ -49,3 +47,4 @@ main! = |_args|
     Stdout.line!("${Inspect.to_str(cmd_output_bytes)}")?
 
     Ok({})
+}

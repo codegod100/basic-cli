@@ -54,7 +54,7 @@ import InternalSqlite
 ##     Real F64,
 ##     Integer I64,
 ##     String Str,
-##     Bytes (List U8),
+##     Bytes (List(U8)),
 ## ]
 ## ```
 Value : InternalSqlite.SqliteValue
@@ -173,13 +173,13 @@ prepare! = |{ path, query: q }|
     |> Result.map_err(internal_to_external_error)
 
 # internal use only
-bind! : Stmt, List Binding => Result {} [SqliteErr ErrCode Str]
+bind! : Stmt, List(Binding) => {}
 bind! = |@Stmt(stmt), bindings|
     Host.sqlite_bind!(stmt, bindings)
     |> Result.map_err(internal_to_external_error)
 
 # internal use only
-columns! : Stmt => List Str
+columns! : Stmt => List(Str)
 columns! = |@Stmt(stmt)|
     Host.sqlite_columns!(stmt)
 
@@ -197,7 +197,7 @@ step! = |@Stmt(stmt)|
 
 # internal use only
 ## Resets a prepared statement back to its initial state, ready to be re-executed.
-reset! : Stmt => Result {} [SqliteErr ErrCode Str]
+reset! : Stmt => {}
 reset! = |@Stmt(stmt)|
     Host.sqlite_reset!(stmt)
     |> Result.map_err(internal_to_external_error)
@@ -222,9 +222,9 @@ execute! :
     {
         path : Str,
         query : Str,
-        bindings : List Binding,
+        bindings : List(Binding),
     }
-    => Result {} [SqliteErr ErrCode Str, RowsReturnedUseQueryInstead]
+    => {}
 execute! = |{ path, query: q, bindings }|
     stmt = try(prepare!, { path, query: q })
     execute_prepared!({ stmt, bindings })
@@ -237,9 +237,9 @@ execute! = |{ path, query: q, bindings }|
 execute_prepared! :
     {
         stmt : Stmt,
-        bindings : List Binding,
+        bindings : List(Binding),
     }
-    => Result {} [SqliteErr ErrCode Str, RowsReturnedUseQueryInstead]
+    => {}
 execute_prepared! = |{ stmt, bindings }|
     try(bind!, stmt, bindings)
     res = step!(stmt)
@@ -270,7 +270,7 @@ query! :
     {
         path : Str,
         query : Str,
-        bindings : List Binding,
+        bindings : List(Binding),
         row : SqlDecode a (RowCountErr err),
     }
     => Result a (SqlDecodeErr (RowCountErr err))
@@ -285,7 +285,7 @@ query! = |{ path, query: q, bindings, row }|
 query_prepared! :
     {
         stmt : Stmt,
-        bindings : List Binding,
+        bindings : List(Binding),
         row : SqlDecode a (RowCountErr err),
     }
     => Result a (SqlDecodeErr (RowCountErr err))
@@ -313,7 +313,7 @@ query_many! :
     {
         path : Str,
         query : Str,
-        bindings : List Binding,
+        bindings : List(Binding),
         rows : SqlDecode a err,
     }
     => Result (List a) (SqlDecodeErr err)
@@ -328,7 +328,7 @@ query_many! = |{ path, query: q, bindings, rows }|
 query_many_prepared! :
     {
         stmt : Stmt,
-        bindings : List Binding,
+        bindings : List(Binding),
         rows : SqlDecode a err,
     }
     => Result (List a) (SqlDecodeErr err)
@@ -339,7 +339,7 @@ query_many_prepared! = |{ stmt, bindings, rows: decode }|
     res
 
 SqlDecodeErr err : [NoSuchField Str, SqliteErr ErrCode Str]err
-SqlDecode a err := List Str -> (Stmt => Result a (SqlDecodeErr err))
+SqlDecode a err := List(Str) -> (Stmt => Result a (SqlDecodeErr err))
 
 ## Decode a Sqlite row into a record by combining decoders.
 ##
@@ -518,8 +518,8 @@ str = decoder(
             _ -> to_unexpected_type_err(val),
 )
 
-## Decode a [Value] to a [List U8].
-bytes : Str -> SqlDecode (List U8) UnexpectedTypeErr
+## Decode a [Value] to a [List(U8)].
+bytes : Str -> SqlDecode (List(U8)) UnexpectedTypeErr
 bytes = decoder(
     |val|
         when val is
@@ -619,8 +619,8 @@ nullable_str = decoder(
             _ -> to_unexpected_type_err(val),
 )
 
-## Decode a [Value] to a [Nullable (List U8)].
-nullable_bytes : Str -> SqlDecode (Nullable (List U8)) UnexpectedTypeErr
+## Decode a [Value] to a [Nullable (List(U8))].
+nullable_bytes : Str -> SqlDecode (Nullable (List(U8))) UnexpectedTypeErr
 nullable_bytes = decoder(
     |val|
         when val is

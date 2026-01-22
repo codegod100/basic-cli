@@ -1,0 +1,24 @@
+module [
+    Path,
+    IOErr,
+    display,
+    from_str,
+]
+
+import InternalPath
+import InternalIOErr
+import Host
+
+## Represents a path to a file or directory on filesystem.
+Path : InternalPath.InternalPath
+
+IOErr : InternalIOErr.IOErr
+
+## Create a path from a string.
+from_str : Str -> Path
+from_str = |str|
+    InternalPath.wrap(FromStr(str))
+
+display : Path -> Str
+display = |_path|
+    Unimplemented

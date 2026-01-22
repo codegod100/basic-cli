@@ -18,7 +18,7 @@ IOErr : InternalIOErr.IOErr
 ## Lists the files and directories inside the directory.
 ##
 ## > [Path.list_dir!] does the same thing, except it takes a [Path] instead of a [Str].
-list! : Str => Result (List Path) [DirErr IOErr]
+list! : Str => Result (List(Path)) [DirErr IOErr]
 list! = |path|
     Path.list_dir!(Path.from_str(path))
 
@@ -31,7 +31,7 @@ list! = |path|
 ##   - the user lacks permission to remove the directory.
 ##
 ## > [Path.delete_empty!] does the same thing, except it takes a [Path] instead of a [Str].
-delete_empty! : Str => Result {} [DirErr IOErr]
+delete_empty! : Str => {}
 delete_empty! = |path|
     Path.delete_empty!(Path.from_str(path))
 
@@ -44,7 +44,7 @@ delete_empty! = |path|
 ##   - the user lacks permission to remove the directory.
 ##
 ## > [Path.delete_all!] does the same thing, except it takes a [Path] instead of a [Str].
-delete_all! : Str => Result {} [DirErr IOErr]
+delete_all! : Str => {}
 delete_all! = |path|
     Path.delete_all!(Path.from_str(path))
 
@@ -56,7 +56,7 @@ delete_all! = |path|
 ##   - the path already exists.
 ##
 ## > [Path.create_dir!] does the same thing, except it takes a [Path] instead of a [Str].
-create! : Str => Result {} [DirErr IOErr]
+create! : Str => {}
 create! = |path|
     Path.create_dir!(Path.from_str(path))
 
@@ -67,6 +67,6 @@ create! = |path|
 ##   - the path already exists
 ##
 ## > [Path.create_all!] does the same thing, except it takes a [Path] instead of a [Str].
-create_all! : Str => Result {} [DirErr IOErr]
+create_all! : Str => {}
 create_all! = |path|
     Path.create_all!(Path.from_str(path))

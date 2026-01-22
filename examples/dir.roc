@@ -4,15 +4,13 @@ import pf.Stdout
 import pf.Dir
 import pf.Path
 import pf.File
-import pf.Arg exposing [Arg]
 
 # Demo of all Dir functions.
 
 # To run this example: check the README.md in this folder
 
-main! : List Arg => Result {} _
-main! = |_args|
-
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     # Create a directory
     Dir.create!("empty-dir")?
 
@@ -40,3 +38,5 @@ main! = |_args|
     Dir.delete_all!("nested-dir")?
 
     Stdout.line!("Success!")
+    Ok({})
+}

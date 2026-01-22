@@ -28,7 +28,7 @@ cwd! = |{}|
 ## Sets the [current working directory](https://en.wikipedia.org/wiki/Working_directory)
 ## in the environment. After changing it, file operations on relative [Path]s will be relative
 ## to this directory.
-set_cwd! : Path => Result {} [InvalidCwd]
+set_cwd! : Path => {}
 set_cwd! = |path|
     Host.set_cwd!(InternalPath.to_bytes(path))
     |> Result.map_err(|{}| InvalidCwd)
@@ -74,7 +74,7 @@ var! = |name|
 ## fail with [DecodeErr](https://www.roc-lang.org/builtins/Decode#DecodeError)
 ## because `123456789` is too large to fit in a [U16](https://www.roc-lang.org/builtins/Num#U16).
 ##
-decode! : Str => Result val [VarNotFound(Str), DecodeErr DecodeError] where val implements Decoding
+decode! : Str => Result val [VarNotFound(Str), DecodeErr DecodeError]
 decode! = |name|
     when Host.env_var!(name) is
         Err({}) -> Err(VarNotFound(name))
@@ -87,7 +87,7 @@ decode! = |name|
 ##
 ## If any key or value contains invalid Unicode, the [Unicode replacement character](https://unicode.org/glossary/#replacement_character)
 ## will be used in place of any parts of keys or values that are invalid Unicode.
-dict! : {} => Dict Str Str
+dict! : {} => Dict(Str, Str)
 dict! = |{}|
     Host.env_dict!({})
     |> Dict.from_list
@@ -122,7 +122,7 @@ dict! = |{}|
 # decode all the required vars only, and then decode the optional ones separately some other way.
 # Alternatively, it could make sense to have some sort of tag union convention here, e.g.
 # if decoding into a tag union of [Present val, Missing], then it knows what to do.
-# decode_all : Result val [] [EnvDecodingFailed Str] [Env] where val implements Decoding
+# decode_all : Result val [] [EnvDecodingFailed Str] [Env]
 
 ARCH : [X86, X64, ARM, AARCH64, OTHER Str]
 OS : [LINUX, MACOS, WINDOWS, OTHER Str]

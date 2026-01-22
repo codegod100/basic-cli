@@ -50,7 +50,7 @@ handle_err = |{ tag, msg }|
 ## followed by a newline.
 ##
 ## > To write to `stderr` without the newline, see [Stderr.write!].
-line! : Str => Result {} [StderrErr IOErr]
+line! : Str => {}
 line! = |str|
     Host.stderr_line!(str)
     |> Result.map_err(handle_err)
@@ -61,12 +61,12 @@ line! = |str|
 ## so this may appear to do nothing until you write a newline!
 ##
 ## > To write to `stderr` with a newline at the end, see [Stderr.line!].
-write! : Str => Result {} [StderrErr IOErr]
+write! : Str => {}
 write! = |str|
     Host.stderr_write!(str)
     |> Result.map_err(handle_err)
 
-write_bytes! : List U8 => Result {} [StderrErr IOErr]
+write_bytes! : List(U8) => {}
 write_bytes! = |bytes|
     Host.stderr_write_bytes!(bytes)
     |> Result.map_err(handle_err)

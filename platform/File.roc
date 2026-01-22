@@ -75,7 +75,7 @@ IOErr : InternalIOErr.IOErr
 ## > To write unformatted bytes to a file, you can use [File.write_bytes!] instead.
 ## >
 ## > [Path.write!] does the same thing, except it takes a [Path] instead of a [Str].
-write! : val, Str, fmt => Result {} [FileWriteErr Path IOErr] where val implements Encoding, fmt implements EncoderFormatting
+write! : val, Str, fmt => {}
 write! = |val, path_str, fmt|
     Path.write!(val, Path.from_str(path_str), fmt)
 
@@ -91,7 +91,7 @@ write! = |val, path_str, fmt|
 ## > To format data before writing it to a file, you can use [File.write!] instead.
 ## >
 ## > [Path.write_bytes!] does the same thing, except it takes a [Path] instead of a [Str].
-write_bytes! : List U8, Str => Result {} [FileWriteErr Path IOErr]
+write_bytes! : List(U8), Str => {}
 write_bytes! = |bytes, path_str|
     Path.write_bytes!(bytes, Path.from_str(path_str))
 
@@ -107,7 +107,7 @@ write_bytes! = |bytes, path_str|
 ## > To write unformatted bytes to a file, you can use [File.write_bytes!] instead.
 ## >
 ## > [Path.write_utf8!] does the same thing, except it takes a [Path] instead of a [Str].
-write_utf8! : Str, Str => Result {} [FileWriteErr Path IOErr]
+write_utf8! : Str, Str => {}
 write_utf8! = |str, path_str|
     Path.write_utf8!(str, Path.from_str(path_str))
 
@@ -131,7 +131,7 @@ write_utf8! = |str, path_str|
 ## [hard link](https://en.wikipedia.org/wiki/Hard_link) to it has been deleted.
 ## >
 ## > [Path.delete!] does the same thing, except it takes a [Path] instead of a [Str].
-delete! : Str => Result {} [FileWriteErr Path IOErr]
+delete! : Str => {}
 delete! = |path_str|
     Path.delete!(Path.from_str(path_str))
 
@@ -147,7 +147,7 @@ delete! = |path_str|
 ## > To read and decode data from a file into a [Str], you can use [File.read_utf8!] instead.
 ## >
 ## > [Path.read_bytes!] does the same thing, except it takes a [Path] instead of a [Str].
-read_bytes! : Str => Result (List U8) [FileReadErr Path IOErr]
+read_bytes! : Str => Result (List(U8)) [FileReadErr Path IOErr]
 read_bytes! = |path_str|
     Path.read_bytes!(Path.from_str(path_str))
 
@@ -177,7 +177,7 @@ read_utf8! = |path_str|
 ## This uses [rust's std::fs::hard_link](https://doc.rust-lang.org/std/fs/fn.hard_link.html).
 ##
 ## > [Path.hard_link!] does the same thing, except it takes a [Path] instead of a [Str].
-hard_link! : Str, Str => Result {} [LinkErr IOErr]
+hard_link! : Str, Str => {}
 hard_link! = |path_str_original, path_str_link|
     Path.hard_link!(Path.from_str(path_str_original), Path.from_str(path_str_link))
 
@@ -286,7 +286,7 @@ time_created! = |path_str|
 ## Renames a file or directory.
 ##
 ## This uses [rust's std::fs::rename](https://doc.rust-lang.org/std/fs/fn.rename.html).
-rename! : Str, Str => Result {} [PathErr IOErr]
+rename! : Str, Str => {}
 rename! = |from_str, to_str|
     from_bytes = InternalPath.to_bytes(Path.from_str(from_str))
     to_bytes = InternalPath.to_bytes(Path.from_str(to_str))
@@ -334,14 +334,14 @@ open_reader_with_capacity! = |path_str, capacity|
     |> Result.map_ok(|reader| @Reader({ reader, path }))
 
 ## Try to read a line from a file given a Reader.
-## The line will be provided as the list of bytes (`List U8`) until a newline (`0xA` byte).
+## The line will be provided as the list of bytes (`List(U8)`) until a newline (`0xA` byte).
 ## This list will be empty when we reached the end of the file.
 ## See [examples/file-read-buffered.roc](https://github.com/roc-lang/basic-cli/blob/main/examples/file-read-buffered.roc) for example usage.
 ##
 ## This uses [rust's `BufRead::read_line`](https://doc.rust-lang.org/std/io/trait.BufRead.html#method.read_line).
 ##
 ## Use [read_utf8!] if you want to get the entire file contents at once.
-read_line! : Reader => Result (List U8) [FileReadErr Path IOErr]
+read_line! : Reader => Result (List(U8)) [FileReadErr Path IOErr]
 read_line! = |@Reader({ reader, path })|
     Host.file_read_line!(reader)
     |> Result.map_err(|err| FileReadErr(path, InternalIOErr.handle_err(err)))

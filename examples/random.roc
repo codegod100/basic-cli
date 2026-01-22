@@ -6,10 +6,9 @@ app [main!] { pf: platform "../platform/main.roc" }
 
 import pf.Stdout
 import pf.Random
-import pf.Arg exposing [Arg]
 
-main! : List Arg => Result {} _
-main! = |_args|
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     random_u64 = Random.random_seed_u64!({})?
     Stdout.line!("Random U64 seed is: ${Inspect.to_str(random_u64)}")?
 
@@ -18,3 +17,5 @@ main! = |_args|
 
     # See the example linked below on how to generate a sequence of random numbers using a seed
     # https://github.com/roc-lang/examples/blob/main/examples/RandomNumbers/main.roc
+    Ok({})
+}

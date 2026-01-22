@@ -3,7 +3,6 @@ app [main!] { pf: platform "../platform/main.roc" }
 import pf.Env
 import pf.Stdout
 import pf.Sqlite
-import pf.Arg exposing [Arg]
 
 # To run this example: check the README.md in this folder and set `export DB_PATH=./examples/todos.db`
 
@@ -16,8 +15,8 @@ import pf.Arg exposing [Arg]
 #     status TEXT NOT NULL
 # );
 
-main! : List Arg => Result {} _
-main! = |_args|
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     db_path = Env.var!("DB_PATH")?
 
     todos = query_todos_by_status!(db_path, "todo")?
@@ -40,10 +39,12 @@ main! = |_args|
             Stdout.line!("\tid: ${id}, task: ${task}, status: ${Inspect.to_str(status)}"),
     )
 
+    Ok({})
+}
 
 Todo : { id : Str, status : TodoStatus, task : Str }
 
-query_todos_by_status! : Str, Str => Result (List Todo) (Sqlite.SqlDecodeErr _)
+query_todos_by_status! : Str, Str => Try(List Todo, [Exit(I32)])
 query_todos_by_status! = |db_path, status|
     Sqlite.query_many!(
         {

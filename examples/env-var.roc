@@ -2,15 +2,13 @@ app [main!] { pf: platform "../platform/main.roc" }
 
 import pf.Stdout
 import pf.Env
-import pf.Arg exposing [Arg]
 
 # How to read environment variables with Env.decode
 
 # To run this example: check the README.md in this folder
 
-main! : List Arg => Result {} _
-main! = |_args|
-
+main! : List(Str) => Try({}, [Exit(I32)])
+main! = |_args| {
     editor = Env.decode!("EDITOR")?
 
     Stdout.line!("Your favorite editor is ${editor}!")?
@@ -23,3 +21,5 @@ main! = |_args|
         |> Result.map_ok(|letters| Str.join_with(letters, " "))?
 
     Stdout.line!("Your favorite letters are: ${joined_letters}")
+    Ok({})
+}

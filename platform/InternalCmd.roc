@@ -7,21 +7,21 @@ module [
 
 Command : {
     program : Str,
-    args : List Str, # [arg0, arg1, arg2, arg3, ...]
-    envs : List Str, # TODO change this to list of tuples? [key0, value0, key1, value1, key2, value2, ...]
+    args : List(Str), # [arg0, arg1, arg2, arg3, ...]
+    envs : List(Str), # TODO change this to list of tuples? [key0, value0, key1, value1, key2, value2, ...]
     clear_envs : Bool,
 }
 
 # Do not change the order of the fields! It will lead to a segfault.
 OutputFromHostSuccess : {
-    stderr_bytes : List U8,
-    stdout_bytes : List U8,
+    stderr_bytes : List(U8),
+    stdout_bytes : List(U8),
 }
 
 # Do not change the order of the fields! It will lead to a segfault.
 OutputFromHostFailure : {
-    stderr_bytes : List U8,
-    stdout_bytes : List U8,
+    stderr_bytes : List(U8),
+    stdout_bytes : List(U8),
     exit_code : I32,
 }
 
