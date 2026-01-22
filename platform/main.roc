@@ -1,25 +1,6 @@
-platform "cli"
+platform ""
     requires {} { main! : List(Str) => Try({}, [Exit(I32)]) }
-    exposes [
-        Path,
-        Arg,
-        Dir,
-        Env,
-        File,
-        Http,
-        Stderr,
-        Stdin,
-        Stdout,
-        Tcp,
-        Url,
-        Utc,
-        Sleep,
-        Cmd,
-        Tty,
-        Locale,
-        Sqlite,
-        Random,
-    ]
+    exposes [Stdout, Stderr, Stdin]
     packages {}
     provides { main_for_host! : "main_for_host" }
     targets: {
@@ -34,17 +15,12 @@ platform "cli"
         }
     }
 
-import Arg
+import Stdout
 import Stderr
-import InternalArg
+import Stdin
 
-main_for_host! : List(InternalArg.ArgToAndFromHost) => I32
-main_for_host! = |raw_args| {
-    args =
-        raw_args
-        |> List.map(InternalArg.to_os_raw)
-        |> List.map(Arg.from_os_raw)
-
+main_for_host! : List(Str) => I32
+main_for_host! = |args| {
     result = main!(args)
     match result {
         Ok({}) => 0
