@@ -11,6 +11,9 @@ fn main() {
 
     #[cfg(windows)]
     println!("cargo:rustc-link-lib=dylib=libapp");
+
+    #[cfg(target_os = "macos")]
+    println!("cargo:rustc-link-lib=framework=CoreFoundation");
 }
 
 /// Gets the path to the workspace root.
